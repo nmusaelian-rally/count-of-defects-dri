@@ -16,6 +16,8 @@
     arrOfFixedAndLimitedByCreationDateFilters : [],
     created : [],
     fixedWithinTTR : [],
+    ttr1  : 28, //28 days = 4 weeks
+    ttr2  : 84,  
     launch: function() {
         this._myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait.This may take long..."});
         this._myMask.show();
@@ -27,7 +29,7 @@
         var now = new Date(),
             today = now.getDay(),
             saturday = 6,
-            ttr = 4,
+            //ttr = 4,
             padding = 1,
             howFarBack = this.numberOfWeeks + padding,
             saturdayDates = [],
@@ -138,11 +140,12 @@
             callback: function(records, operation) {
                 if(operation.wasSuccessful()) {
                     //console.log('records.length',records.length);
-                    if (i<this.numberOfWeeks) { //first 12 are creation date filters,include open & closed bugs
+                    if (i<this.numberOfWeeks) { //first 16 are creation date filters,include open & closed bugs
                         this.created.push(records.length);
                     }
                     else{
                         this.fixedWithinTTR.push(this.getFixedDefectsWithinTTR(records));
+                        //console.log('inside loop this.fixedWithinTTR:', this.fixedWithinTTR);
                     }
                     this.defectStore.clearFilter(records.length);
                     if (i < this.concatArraysOfFilters.length-1) { //if not done, call itself
@@ -156,9 +159,9 @@
         });
     },
     getFixedDefectsWithinTTR:function(records){
-        var ttr4 = 28; //4 weeks
-        var ttr12 = 84; //12 weeks
-        var closedDefectWithinTTRCount = [];
+        var closedDefectsWithinTTR1 = [],
+            closedDefectsWithinTTR2 = [],
+            closedDefectsWithinAllTTRs = [];
         var arrayOfDataObjects = [];
         _.each(records, function(record){
             var created = new Date(record.get('CreationDate'));
@@ -168,34 +171,61 @@
             //console.log('closed',closed);
             var diff = Math.floor((closed - created)/86400000); 
             //console.log('diff', diff);
-            if (diff <= ttr4) {
-                closedDefectWithinTTRCount.push(record);
+            if (diff <= this.ttr2) {
+                closedDefectsWithinTTR2.push(record);
+            }
+            if (diff <= this.ttr1) {
+                closedDefectsWithinTTR1.push(record);
             }
         },this);
-        return closedDefectWithinTTRCount.length;
+        closedDefectsWithinAllTTRs.push(closedDefectsWithinTTR1.length);
+        closedDefectsWithinAllTTRs.push(closedDefectsWithinTTR2.length);
+        console.log('closedDefectsWithinAllTTRs',closedDefectsWithinAllTTRs);
+        return closedDefectsWithinAllTTRs;
     },
     makeCustomStore:function(){
         console.log('created',this.created);
         console.log('fixedWithinTTR',this.fixedWithinTTR);
-        
+        this.fixedWithinTTR = _.flatten(this.fixedWithinTTR);
+        var fixedWithinTTR1 = [];
+        var fixedWithinTTR2 = [];
+        for(var index=0; index<this.fixedWithinTTR.length;index++){
+            if(index % 2 == 0){
+                fixedWithinTTR1.push(this.fixedWithinTTR[index]);
+            }
+            else{
+                fixedWithinTTR2.push(this.fixedWithinTTR[index]);
+            }
+        }
         var startDates = [];
         var endDates = [];
-        var dri = [];
-        var combinedArr = [];
-        var dimention = 4;
-        for(var f = 0, c=0; f<this.fixedWithinTTR.length; f++,c++){
-                dri.push((this.fixedWithinTTR[f]/this.created[c]*100).toFixed(2) + '%');
+        var dri1 = [];
+        var dri2 = [];
+        
+        var combinedArr = [];      
+        console.log('fixedWithinTTR1',fixedWithinTTR1);
+        console.log('fixedWithinTTR2',fixedWithinTTR2);
+        
+        for(var f = 0, c=0; f<fixedWithinTTR1.length; f++,c++){
+            dri1.push((fixedWithinTTR1[f]/this.created[c]*100).toFixed(2) + '%');
         }
+        for(var f = 0, c=0; f<fixedWithinTTR2.length; f++,c++){
+            dri2.push((fixedWithinTTR2[f]/this.created[c]*100).toFixed(2) + '%');
+        }
+        console.log('dri1',dri1);
+        console.log('dri2',dri2);
         combinedArr.push(this.created);
-        combinedArr.push(this.fixedWithinTTR);
-        combinedArr.push(dri);
+        combinedArr.push(fixedWithinTTR1);
+        combinedArr.push(fixedWithinTTR2);
+        combinedArr.push(dri1);
+        combinedArr.push(dri2);
         combinedArr.push(startDates);
         combinedArr.push(endDates);
         _.each(this.weeks, function(week){
             startDates.push(week.start);
             endDates.push(week.end);
         });
-        console.log(combinedArr);
+        console.log('combinedArr',combinedArr);
         var zippedChunks = _.zip(combinedArr);
         console.log('zippedChunks',zippedChunks);
         var arrayOfObjects = [];
@@ -221,23 +251,31 @@
             columnCfgs: [
                 {
                     text: 'Start Week',
-                    dataIndex: '3'
+                    dataIndex: '5'
                 },
                 {
                     text: 'End Week',
-                    dataIndex: '4'
+                    dataIndex: '6'
                 },
                 {
                     text: 'Created Defects',
                     dataIndex: '0'
                 },
                 {
-                    text: 'Fixed Defect',
+                    text: 'Fixed Defects (TTR <= 4 weeks)',
                     dataIndex: '1'
                 },
                 {
-                    text: '4 Week DRI',
+                    text: 'Fixed Defects (TTR <= 12 weeks)',
                     dataIndex: '2'
+                },
+                {
+                    text: '4 Week DRI',
+                    dataIndex: '3'
+                },
+                {
+                    text: '12 Week DRI',
+                    dataIndex: '4'
                 }
             ],
             showPagingToolbar:false
