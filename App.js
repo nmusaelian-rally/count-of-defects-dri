@@ -19,7 +19,8 @@ Ext.define('CustomApp', {
             today = now.getDay(),
             saturday = 6,
             ttr = 4,
-            padding = ttr + 1,
+            //padding = ttr + 1,
+            padding = 1,
             howFarBack = this.numberOfWeeks + padding,
             saturdayDates = [],
             closestSaturday = null,
@@ -41,16 +42,16 @@ Ext.define('CustomApp', {
             var week = {};
             week['end'] = saturdayDates[i];
             week['start'] = saturdayDates[i+1];
-            weeks.push(week);
+            this.weeks.push(week);
         }
-        _.each(weeks, function(week){
-            console.log('start:', week.start, 'end:', week.end);
-        });
-        console.log('--------', weeks.length);
-        this.weeks = weeks.slice(ttr);
         _.each(this.weeks, function(week){
             console.log('start:', week.start, 'end:', week.end);
         });
+        console.log('--------', weeks.length);
+        //this.weeks = weeks.slice(ttr);
+        //_.each(this.weeks, function(week){
+        //    console.log('start:', week.start, 'end:', week.end);
+        //});
     },
     createFilters:function(){
         var tagFilter;
