@@ -2,7 +2,7 @@ Ext.define('CustomApp', {
     extend: 'Rally.app.App',
     componentCls: 'app',
     weeks : [],
-    numberOfWeeks : 12,
+    numberOfWeeks : 16,
     arrOfCreationDateFilters : [],
     arrOfFixedAndLimitedByCreationDateFilters : [],
     created : [],
@@ -19,7 +19,6 @@ Ext.define('CustomApp', {
             today = now.getDay(),
             saturday = 6,
             ttr = 4,
-            //padding = ttr + 1,
             padding = 1,
             howFarBack = this.numberOfWeeks + padding,
             saturdayDates = [],
@@ -48,10 +47,6 @@ Ext.define('CustomApp', {
             console.log('start:', week.start, 'end:', week.end);
         });
         console.log('--------', weeks.length);
-        //this.weeks = weeks.slice(ttr);
-        //_.each(this.weeks, function(week){
-        //    console.log('start:', week.start, 'end:', week.end);
-        //});
     },
     createFilters:function(){
         var tagFilter;
