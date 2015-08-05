@@ -1,0 +1,24 @@
+.app {
+     /* Add app styles here */
+}
+
+.mystyle {
+    /*color:#808080;*/
+    background:red;
+}
+
+.app .rally-grid .x-grid-data-row:nth-child(-n+12) .x-grid-cell:last-child {
+    color: #808080;
+}
+
+.app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(7) {
+    color: #808080;
+}
+
+.app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(5) {
+    color: #808080;
+}
+
+.app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(6) {
+    color: #808080;
+}
