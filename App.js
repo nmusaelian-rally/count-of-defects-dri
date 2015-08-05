@@ -198,10 +198,10 @@ Ext.define('CustomApp', {
         console.log('fixedWithinTTR2',fixedWithinTTR2);
         
         for(var f = 0, c=0; f<fixedWithinTTR1.length; f++,c++){
-            dri1.push((fixedWithinTTR1[f]/this.created[c]*100).toFixed(2) + '%');
+            dri1.push((fixedWithinTTR1[f]/this.created[c]*100).toFixed(2));
         }
         for(var f = 0, c=0; f<fixedWithinTTR2.length; f++,c++){
-            dri2.push((fixedWithinTTR2[f]/this.created[c]*100).toFixed(2) + '%');
+            dri2.push((fixedWithinTTR2[f]/this.created[c]*100).toFixed(2));
         }
         console.log('dri1',dri1);
         console.log('dri2',dri2);
@@ -261,11 +261,11 @@ Ext.define('CustomApp', {
                     dataIndex: '2'
                 },
                 {
-                    text: '4 Week DRI',
+                    text: '4 Week DRI %',
                     dataIndex: '3'
                 },
                 {
-                    text: '12 Week DRI',
+                    text: '12 Week DRI %',
                     dataIndex: '4'
                 }
             ],

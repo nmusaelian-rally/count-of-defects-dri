@@ -207,10 +207,10 @@
         console.log('fixedWithinTTR2',fixedWithinTTR2);
         
         for(var f = 0, c=0; f<fixedWithinTTR1.length; f++,c++){
-            dri1.push((fixedWithinTTR1[f]/this.created[c]*100).toFixed(2) + '%');
+            dri1.push((fixedWithinTTR1[f]/this.created[c]*100).toFixed(2));
         }
         for(var f = 0, c=0; f<fixedWithinTTR2.length; f++,c++){
-            dri2.push((fixedWithinTTR2[f]/this.created[c]*100).toFixed(2) + '%');
+            dri2.push((fixedWithinTTR2[f]/this.created[c]*100).toFixed(2));
         }
         console.log('dri1',dri1);
         console.log('dri2',dri2);
@@ -270,11 +270,11 @@
                     dataIndex: '2'
                 },
                 {
-                    text: '4 Week DRI',
+                    text: '4 Week DRI %',
                     dataIndex: '3'
                 },
                 {
-                    text: '12 Week DRI',
+                    text: '12 Week DRI %',
                     dataIndex: '4'
                 }
             ],
@@ -295,23 +295,13 @@
 
 
     <style type="text/css">
-        .app {
-  /* Add app styles here */
-}
-.mystyle {
-  /*color:#808080;*/
-  background: red;
-}
-.app .rally-grid .x-grid-data-row:nth-child(-n+12) .x-grid-cell:last-child {
+        .app .rally-grid .x-grid-data-row:nth-child(-n+12) .x-grid-cell:last-child {
   color: #808080;
 }
+/*.app .rally-grid .x-grid-data-row:nth-child(n+12) .x-grid-cell:last-child {
+    font-weight: bold;
+} */
 .app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(7) {
-  color: #808080;
-}
-.app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(5) {
-  color: #808080;
-}
-.app .rally-grid .x-grid-data-row:nth-child(-n+4) .x-grid-cell:nth-child(6) {
   color: #808080;
 }
 
